@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MyAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="MyAppModelStoreContainer">
+    <EntitySet Name="UserSet" EntityType="MyAppModel.Store.UserSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserSet_Guest" EntityType="MyAppModel.Store.UserSet_Guest" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserSet_Member" EntityType="MyAppModel.Store.UserSet_Member" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserSet_Admin" EntityType="MyAppModel.Store.UserSet_Admin" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_Guest_inherits_User" Association="MyAppModel.Store.FK_Guest_inherits_User">
+      <End Role="User" EntitySet="UserSet" />
+      <End Role="Guest" EntitySet="UserSet_Guest" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Member_inherits_User" Association="MyAppModel.Store.FK_Member_inherits_User">
+      <End Role="User" EntitySet="UserSet" />
+      <End Role="Member" EntitySet="UserSet_Member" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Admin_inherits_User" Association="MyAppModel.Store.FK_Admin_inherits_User">
+      <End Role="User" EntitySet="UserSet" />
+      <End Role="Admin" EntitySet="UserSet_Admin" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="UserSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nchar" Nullable="false" MaxLength="8" />
+  </EntityType>
+  <EntityType Name="UserSet_Guest">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Disable" Type="bit" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserSet_Member">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Password" Type="varbinary(max)" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserSet_Admin">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Guest_inherits_User">
+    <End Role="User" Type="MyAppModel.Store.UserSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Guest" Type="MyAppModel.Store.UserSet_Guest" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Guest">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Member_inherits_User">
+    <End Role="User" Type="MyAppModel.Store.UserSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Member" Type="MyAppModel.Store.UserSet_Member" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Member">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Admin_inherits_User">
+    <End Role="User" Type="MyAppModel.Store.UserSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Admin" Type="MyAppModel.Store.UserSet_Admin" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Admin">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="MyAppModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="MyAppModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="UserSet" EntityType="MyAppModel.User" />
+        </EntityContainer>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="8" FixedLength="true" />
+        </EntityType>
+        <EntityType Name="Guest" BaseType="MyAppModel.User">
+          <Property Name="Disable" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Member" BaseType="MyAppModel.User">
+          <Property Name="Password" Type="Binary" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Admin" BaseType="MyAppModel.User">
+          </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MyAppModelStoreContainer" CdmEntityContainer="MyAppModelContainer">
+    <EntitySetMapping Name="UserSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MyAppModel.User)">
+        <MappingFragment StoreEntitySet="UserSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(MyAppModel.Guest)">
+        <MappingFragment StoreEntitySet="UserSet_Guest">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Disable" ColumnName="Disable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(MyAppModel.Member)">
+        <MappingFragment StoreEntitySet="UserSet_Member">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(MyAppModel.Admin)">
+        <MappingFragment StoreEntitySet="UserSet_Admin">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
