@@ -25,8 +25,8 @@ namespace ModelFirst
             Guest user1 = new Guest();
             user1.Name = "Joe";
             user1.Disable = false;
-            dc.UserSet.Add(user1);
-            dc.SaveChanges();
+            dc.UserSet.Add(user1);//新增一筆user1 使用者
+            dc.SaveChanges();//存入資料庫
         }
 
         private void button2_Click(object sender, EventArgs e)//實作LINQ擴充
